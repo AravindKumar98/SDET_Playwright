@@ -1,0 +1,10 @@
+# Ignore dependencies
+node_modules/
+
+# Ignore environment files
+.env
+
+# Ignore OS/Editor files
+.DS_Store
+.idea/
+.vscode/
