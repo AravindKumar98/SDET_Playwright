@@ -8,3 +8,8 @@ node_modules/
 .DS_Store
 .idea/
 .vscode/
+
+# Playwright reports and test artifacts
+reports/
+test-results/
+

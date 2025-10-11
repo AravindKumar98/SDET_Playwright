@@ -1,4 +1,5 @@
 import { Page, locator, expect } from "@playwright/test";
+import test from "../fixtures/test-data.json";
 
 class LoginPage {
 
@@ -11,7 +12,7 @@ class LoginPage {
   }
 
   async nagivateToSauceDemoSite() {
-    await this.page.goto('https://www.saucedemo.com/');
+    await this.page.goto( test.baseURL );
   }
 
   async login(username, password) {

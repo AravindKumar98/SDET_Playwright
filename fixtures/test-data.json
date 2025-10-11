@@ -1,5 +1,10 @@
 {
+    "baseURL": "https://www.saucedemo.com/",
     "username": "standard_user",
     "password": "secret_sauce",
-    "product": "Sauce Labs Backpack"
+    "product": "Sauce Labs Backpack",
+    "firstName": "Test",
+    "lastName": "User",
+    "postalCode": "123456",
+    "orderConfirmationMessage": "Thank you for your order!"
 }
