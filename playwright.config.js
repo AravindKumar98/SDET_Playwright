@@ -17,9 +17,9 @@ const config = {
     {
       name: 'Chromium',
       use: { 
-        screenshot: 'only-on-failure',  // takes screenshots only when a test fails
-        video: 'retain-on-failure',     // records video for failed tests
-        trace: 'retain-on-failure',     // keeps trace for debugging failures
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
+        trace: 'retain-on-failure',
       },
       retries: 1,
       workers: 2,
@@ -58,21 +58,72 @@ const config = {
       workers: 1,
       fullyParallel: false,
     },
-   {
+
+    // ---------------- BrowserStack Projects ----------------
+    {
       name: 'browserstack-chromium',
       use: {
         connectOptions: {
           wsEndpoint: `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(JSON.stringify({
             browser: 'chrome',
             browser_version: 'latest',
-            os: 'osx',
-            os_version: 'Sonoma',
+            os: 'Windows',
+            os_version: '11',
             buildName: 'Playwright-Jenkins-Build',
-            sessionName: 'BrowserStack-Cloud-Test',
+            sessionName: 'BrowserStack-Chrome-Test',
             'browserstack.username': process.env.BROWSERSTACK_USERNAME,
             'browserstack.accessKey': process.env.BROWSERSTACK_ACCESS_KEY,
+            video: true,
+            networkLogs: true,
+            consoleLogs: 'info'
           }))}`,
-          timeout: 60000, // 60 seconds timeout
+          timeout: 120000, // 2 min
+        },
+        video: 'retain-on-failure',
+        screenshot: 'only-on-failure',
+      },
+    },
+    {
+      name: 'browserstack-webkit',
+      use: {
+        connectOptions: {
+          wsEndpoint: `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(JSON.stringify({
+            browser: 'webkit',
+            browser_version: 'latest',
+            os: 'OS X',
+            os_version: 'Sonoma',
+            buildName: 'Playwright-Jenkins-Build',
+            sessionName: 'BrowserStack-WebKit-Test',
+            'browserstack.username': process.env.BROWSERSTACK_USERNAME,
+            'browserstack.accessKey': process.env.BROWSERSTACK_ACCESS_KEY,
+            video: true,
+            networkLogs: true,
+            consoleLogs: 'info'
+          }))}`,
+          timeout: 120000,
+        },
+        video: 'retain-on-failure',
+        screenshot: 'only-on-failure',
+      },
+    },
+    {
+      name: 'browserstack-edge',
+      use: {
+        connectOptions: {
+          wsEndpoint: `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(JSON.stringify({
+            browser: 'edge',
+            browser_version: 'latest',
+            os: 'Windows',
+            os_version: '11',
+            buildName: 'Playwright-Jenkins-Build',
+            sessionName: 'BrowserStack-Edge-Test',
+            'browserstack.username': process.env.BROWSERSTACK_USERNAME,
+            'browserstack.accessKey': process.env.BROWSERSTACK_ACCESS_KEY,
+            video: true,
+            networkLogs: true,
+            consoleLogs: 'info'
+          }))}`,
+          timeout: 120000,
         },
         video: 'retain-on-failure',
         screenshot: 'only-on-failure',
@@ -80,10 +131,9 @@ const config = {
     },
   ],
   reporter: [
-    ['list'], 
-    ['allure-playwright'] // adds Allure reporter
+    ['line'], 
+    ['allure-playwright'] // Allure reporter
   ],
-
 };
 
 module.exports = config;

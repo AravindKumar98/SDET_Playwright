@@ -13,6 +13,7 @@ End-to-end testing framework for web applications using Playwright.
 1. **Install dependencies:**
    ```sh
    npm install
+   npm i -D allure-playwright
    ```
 2. **Run all tests:**
    ```sh
@@ -24,15 +25,32 @@ End-to-end testing framework for web applications using Playwright.
    ```sh
    npx playwright test tests/auth/login.spec.js
    ```
-4. **View HTML report:**
+4. **View Playwright HTML report:**
    ```sh
    npx playwright show-report
    ```
 5. **View Allure report:**
    ```sh
+   npx allure-playwright generate
    npx allure serve allure-results
    ```
    (Requires allure-playwright and Allure CLI)
+
+## Cloud & CI Integration
+
+### BrowserStack Setup
+1. **Install BrowserStack Playwright CLI:**
+   ```sh
+   npm i -D @browserstack/playwright-cli
+   ```
+2. **Configure BrowserStack credentials:**
+   - Set `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` as environment variables.
+   - Or add them to your `browserstack.config.js`.
+3. **Run tests on BrowserStack:**
+   ```sh
+   npx browserstack-playwright test
+   ```
+   - See BrowserStack docs for advanced config and parallelization.
 
 ## Key Patterns
 - **Page Object Model:** UI logic in `pages/` classes, imported by tests
@@ -65,6 +83,8 @@ test('Login Test', async ({ page }) => {
 - Reference shared data for credentials and test values
 - Place screenshots and traces in `reports/`
 - Use Allure reporter for advanced test reporting
+- Integrate with BrowserStack for cloud testing
+- Use Jenkins for CI automation
 
 ---
 For more details, see `.github/copilot-instructions.md` or ask for examples of specific workflows.
