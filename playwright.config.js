@@ -16,10 +16,10 @@ const config = {
   projects: [
     {
       name: 'Chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        viewport: { width: 1280, height: 720 },
-        trace: 'on',
+      use: { 
+        screenshot: 'only-on-failure',  // takes screenshots only when a test fails
+        video: 'retain-on-failure',     // records video for failed tests
+        trace: 'retain-on-failure',     // keeps trace for debugging failures
       },
       retries: 1,
       workers: 2,
@@ -58,12 +58,32 @@ const config = {
       workers: 1,
       fullyParallel: false,
     },
+   {
+      name: 'browserstack-chromium',
+      use: {
+        connectOptions: {
+          wsEndpoint: `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(JSON.stringify({
+            browser: 'chrome',
+            browser_version: 'latest',
+            os: 'osx',
+            os_version: 'Sonoma',
+            buildName: 'Playwright-Jenkins-Build',
+            sessionName: 'BrowserStack-Cloud-Test',
+            'browserstack.username': process.env.BROWSERSTACK_USERNAME,
+            'browserstack.accessKey': process.env.BROWSERSTACK_ACCESS_KEY,
+          }))}`,
+          timeout: 60000, // 60 seconds timeout
+        },
+        video: 'retain-on-failure',
+        screenshot: 'only-on-failure',
+      },
+    },
   ],
-  reporter: [['list'], ['html', { outputFolder: 'reports/playwright-report' }]],
   reporter: [
     ['list'], 
     ['allure-playwright'] // adds Allure reporter
   ],
+
 };
 
 module.exports = config;

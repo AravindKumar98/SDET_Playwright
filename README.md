@@ -28,6 +28,11 @@ End-to-end testing framework for web applications using Playwright.
    ```sh
    npx playwright show-report
    ```
+5. **View Allure report:**
+   ```sh
+   npx allure serve allure-results
+   ```
+   (Requires allure-playwright and Allure CLI)
 
 ## Key Patterns
 - **Page Object Model:** UI logic in `pages/` classes, imported by tests
@@ -38,13 +43,28 @@ End-to-end testing framework for web applications using Playwright.
 ## Configuration Highlights
 - Multiple browser projects: Chromium, WebKit, Pixel 5, iPhone 12
 - Custom viewport, trace, retries, parallel settings per browser
-- HTML and list reporters output to `reports/playwright-report`
+- HTML, list, and Allure reporters output to `reports/playwright-report` and Allure results
+- Screenshots, video, and trace are retained only on failure for Chromium
+
+## Example Test
+```js
+import { test } from '@playwright/test';
+import LoginPage from '../../pages/loginpage';
+import sharedData from '../../test-data/sharedData.json';
+
+test('Login Test', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.login(sharedData.username, sharedData.password);
+    await loginPage.verifyLoginSuccess();
+});
+```
 
 ## Tips
 - Use POM classes for all UI actions
 - Organize tests by feature
 - Reference shared data for credentials and test values
 - Place screenshots and traces in `reports/`
+- Use Allure reporter for advanced test reporting
 
 ---
 For more details, see `.github/copilot-instructions.md` or ask for examples of specific workflows.
