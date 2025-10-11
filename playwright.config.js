@@ -60,6 +60,10 @@ const config = {
     },
   ],
   reporter: [['list'], ['html', { outputFolder: 'reports/playwright-report' }]],
+  reporter: [
+    ['list'], 
+    ['allure-playwright'] // adds Allure reporter
+  ],
 };
 
 module.exports = config;
