@@ -8,8 +8,11 @@ node_modules/
 .DS_Store
 .idea/
 .vscode/
+.github/
 
 # Playwright reports and test artifacts
 reports/
 test-results/
+allure-report/
+allure-results/
 
