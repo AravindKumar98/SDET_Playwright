@@ -88,7 +88,7 @@ const config = {
       use: {
         connectOptions: {
           wsEndpoint: `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(JSON.stringify({
-            browser: 'webkit',
+            browser: 'playwright-webkit',
             browser_version: 'latest',
             os: 'OS X',
             os_version: 'Sonoma',
