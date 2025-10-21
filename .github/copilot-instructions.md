@@ -1,7 +1,7 @@
 # Copilot Instructions for SDET_Playwright
 
 ## Project Overview
-This is a Playwright-based end-to-end testing framework for web applications, organized for modularity and maintainability. The main target is https://www.saucedemo.com/.
+This is a Playwright-based end-to-end testing framework for web applications, organized for modularity and maintainability. 
 
 ## Architecture & Structure
 - **tests/**: Main test directory, subdivided by feature (e.g., `auth/`, `cart/`, `checkout/`, `product/`). Each contains spec files (e.g., `login.spec.js`).
@@ -34,19 +34,6 @@ This is a Playwright-based end-to-end testing framework for web applications, or
 ## Integration Points
 - **External Dependencies**: Relies on `@playwright/test` and Playwright browsers.
 - **Reports**: HTML and trace reports are generated in `reports/playwright-report`.
-
-## Example: Login Test
-```js
-import { test } from '@playwright/test';
-import LoginPage from '../../pages/loginpage';
-import sharedData from '../../test-data/sharedData.json';
-
-test('Login Test', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.login(sharedData.username, sharedData.password);
-    await loginPage.verifyLoginSuccess();
-});
-```
 
 ## Tips for AI Agents
 - Always use POM classes for UI actions.
