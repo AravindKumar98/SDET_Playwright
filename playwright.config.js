@@ -131,6 +131,7 @@ const config = {
     },
   ],
   reporter: [
+    ['html'],
     ['line'], 
     ['allure-playwright'] // Allure reporter
   ],
