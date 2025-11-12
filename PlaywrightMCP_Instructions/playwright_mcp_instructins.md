@@ -10,6 +10,13 @@ You are given structured test case scenarios in `TestCaseDetails/test_cases_deta
 
 Generate Playwright test scripts dynamically from test case data, execute them through Playwright MCP, and iterate until they pass successfully.
 
+This file provides **MANDATORY** rules and guidelines for generating Playwright test scripts using a **dual workflow approach**
+
+1. **Workflow A: MCP Browser Execution** - Execute tests in real-time using MCP browser tools to validate functionality
+2. **Workflow B: Playwright Code Generation** - Generate production read Playwright test code using existing locators
+
+These rules ensure consistency, maintainability, and framework compliance across both workflows.
+
 ---
 
 ## ⚙️ 1. Role Definition
