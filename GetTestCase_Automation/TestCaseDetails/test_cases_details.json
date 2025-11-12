@@ -1,23 +1,9 @@
 [
     {
-        "TestCaseID": "TC201",
-        "Title": "Verify the cart page after user added product to the cart",
-        "Prerequisites": "Site url : https://www.saucedemo.com/\n\nProduct is added to the cart\nUsername: standard_user\nPassword: secret_sauce",
-        "Steps": "1. Click on cart icon from the top\r\n2. Verify the cart page details",
-        "ExpectedResult": "1. Cart page will be displayed\r\n2. Added product should be displayed with quantity, price and Remove button. Also, Continue Shopping and Checkout button should be displayed"
-    },
-    {
-        "TestCaseID": "TC304",
-        "Title": "Verify that user clicks on Cancelling the order from Checkout page",
+        "TestCaseID": "TC303",
+        "Title": "Verify that user should able to place an order successfully",
         "Prerequisites": "Site url : https://www.saucedemo.com/\n\nRegistered user is signed in\nProduct is added to the user\nUser is on checkout page\nUsername: standard_user\nPassword: secret_sauce",
-        "Steps": "1. Enter the user information\r\n2. Click on Continue button\r\n3. Click on Cancel button",
-        "ExpectedResult": "1. Fill the First Name, Last Name, Zip/Postal Code fields\r\n2. Checkout: Overview will be displayed\r\n3. Return to Home page and product in the cart should not be removed."
-    },
-    {
-        "TestCaseID": "TC005",
-        "Title": "Verify the login page when locked out user trys to login",
-        "Prerequisites": "Site url : https://www.saucedemo.com/\n\nUsername: locked_out_user\npassword: secret_sauce",
-        "Steps": "1. Launch Sauce Labs site in any browser\r\n2. Enter locked out user credentials in the login page\r\n3. Click on Login button",
-        "ExpectedResult": "1. Sauce labs login page will be displayed\r\n3. \"Epic sadface: Sorry, this user has been locked out.\" error message should be displayed."
+        "Steps": "1. Verify the product information\r\n2. Click on Finish button",
+        "ExpectedResult": "1.  Product details, total price with tax, payment and shipping information should be displayed correctly.\r\n2. Order should be placed successfully and \"Thank you for your order!\" message should be displayed with Back Home button"
     }
 ]

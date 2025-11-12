@@ -1,6 +1,7 @@
+
 # SDET_Playwright
 
-End-to-end testing framework for web applications using Playwright.
+End-to-end testing framework for web applications using Playwright, now with Playwright MCP (Model Context Protocol) integration for dynamic, JSON-driven test generation and execution.
 
 ## Project Structure
 - `tests/` — Feature-based folders (e.g., `auth/`, `cart/`, `checkout/`, `product/`) with `.spec.js` test files
@@ -29,20 +30,52 @@ End-to-end testing framework for web applications using Playwright.
 
    This repository contains UI tests (Playwright + POM), API tests, and integration tests that combine API and UI workflows. Tests are organized by feature and include helpers, fixtures, and reporting integrations (Allure, Playwright HTML reports).
 
-   ## What changed (recent)
-   - Added chained API tests and dependent API flows (examples under `tests/API_Testing/`)
-   - Added UI+API integration examples (e.g., `ui_api_integration.spec.js`) demonstrating token usage and localStorage/cookie setup
-   - Centralized error messages and test data in `fixtures/test-data.json` (used by login tests)
-   - Page objects (`pages/loginpage.js`) now expose assertion helpers (e.g., `assertLoginSuccess()`) — tests call these helpers for clearer responsibilities
 
-   ## Project layout
-   - `tests/` — feature folders (e.g. `auth/`, `cart/`, `checkout/`, `API_Testing/`) containing `.spec.js` files
-   - `pages/` — Page Object Model (POM) classes (e.g. `loginpage.js`)
-   - `fixtures/` — test data and JSON fixtures (`test-data.json` holds baseURL, credentials, and expected error messages)
-   - `reports/` — screenshots and other artifacts saved during test runs
-   - `playwright-report/` — Playwright HTML report output
-   - `playwright.config.js` — central Playwright configuration (projects, reporters, traces, BrowserStack sections)
-   - `package.json` — scripts and dependencies
+## Playwright MCP Integration (Dynamic Test Generation)
+
+### Overview
+Playwright MCP enables dynamic, data-driven test generation and execution using structured JSON test case files. It supports a dual workflow:
+
+1. **MCP Browser Execution (Workflow A):**
+   - Test steps are executed in real-time using Playwright MCP tools, validating each action and assertion interactively.
+2. **Playwright Code Generation (Workflow B):**
+   - After successful browser execution, Playwright test code is generated using the Page Object Model (POM) structure, referencing existing page classes and locators.
+
+### How it works
+- Test cases are defined in `TestCaseDetails/test_cases_details.json` (auto-generated from Excel or other sources).
+- MCP reads these JSON files, executes each step in the browser, and validates the expected results.
+- Once all steps pass, MCP generates a Playwright test script in the `tests/` folder, using POM classes from `pages/`.
+- The generated test is executed and iterated until it passes.
+- Results are summarized in a JSON file (e.g., `reports/TC303_result.json`).
+
+#### Example Workflow
+1. Add or update test cases in `TestCaseDetails/test_cases_details.json`.
+2. Run MCP to execute and generate tests:
+   - `npx playwright test` (or use the MCP runner as documented in `PlaywrightMCP_Instructions/playwright_mcp_instructins.md`)
+3. Review generated test files in `tests/` and result summaries in `reports/`.
+
+#### Key Files
+- `PlaywrightMCP_Instructions/playwright_mcp_instructins.md`: Main instructions for MCP-driven test generation and execution.
+- `PlaywrightMCP_Instructions/pom_structure_instructions.md`: POM structure and standards for page classes.
+- `TestCaseDetails/test_cases_details.json`: Source of truth for test scenarios.
+- `fixtures/test-data.json`: Shared test data and environment values.
+- `reports/TCxxx_result.json`: Per-test result summary (Pass/Fail).
+
+#### Benefits
+- No manual test script writing for new scenarios—just update the JSON.
+- Ensures all tests use the latest POM classes and selectors.
+- Rapid iteration: failed steps are debugged and fixed interactively before code generation.
+- Consistent reporting and traceability from test case to result.
+
+
+## Project layout
+- `tests/` — feature folders (e.g. `auth/`, `cart/`, `checkout/`, `API_Testing/`) containing `.spec.js` files (including MCP-generated tests)
+- `pages/` — Page Object Model (POM) classes (e.g. `login.page.js`, `cart.page.js`, `checkout.page.js`)
+- `fixtures/` — test data and JSON fixtures (`test-data.json` holds baseURL, credentials, and expected error messages)
+- `reports/` — screenshots, Playwright HTML reports, and MCP result JSON files
+- `playwright-report/` — Playwright HTML report output
+- `playwright.config.js` — central Playwright configuration (projects, reporters, traces, BrowserStack sections)
+- `package.json` — scripts and dependencies
 
    ## Quick start
    1. Install dependencies
@@ -112,4 +145,29 @@ End-to-end testing framework for web applications using Playwright.
    $env:BROWSERSTACK_USERNAME='your_user'
    $env:BROWSERSTACK_ACCESS_KEY='your_key'
    ```
+
+## Main Utility
+- **getTestCaseDetails.js**: Reads test cases from an Excel file (e.g., `SauceLabs_TestCases.xlsx`) and outputs structured JSON to `TestCaseDetails/test_cases_details.json`.
+- **TestCaseDetails/**: Stores the generated JSON files for use in automated tests.   
+
+
+# PlaywrightMCP_Instructions
+
+This folder contains documentation and instructions for using the Playwright-based Model Context Protocol (MCP) automation framework.
+
+## Contents
+- **apiTest.instructions.md**: Guidelines for API automation and integration with Playwright.
+- **webTest.instructions.md**: Steps and best practices for web UI automation using Playwright and the Page Object Model (POM).
+- **pom_structure_instructions.md**: Details on structuring and maintaining POM classes for scalable test automation.
+- **playwright_mcp_instructins.md**: General instructions for running, configuring, and extending the Playwright MCP framework, including dual workflow and JSON-driven test generation.
+
+## Usage
+- Refer to these markdown files for step-by-step instructions, code examples, and best practices.
+- Use as a reference when adding new tests, integrating APIs, or updating the POM structure.
+
+## Contribution
+- Update or add new instruction files as the framework evolves.
+- Keep documentation in sync with codebase changes for easier onboarding and maintenance.
+
+---
 
