@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import testData from "../fixtures/test-data.json";
-import LoginPage from "../pages/login.page.js";
+import { LoginPage } from "../pages/login.page.js";
 import { CartPage } from "../pages/cart.page.js";
 
 // TC201: Verify the cart page after user added product to the cart

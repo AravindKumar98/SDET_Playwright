@@ -79,60 +79,53 @@ export class BasePage {
 
 Each page (Login, Cart, Checkout, etc.) should have its own class extending `BasePage`. Define **locators** at the top and implement **page-specific actions** below.
 
-### Example: `pages/login.page.js`
-
-```js
-import { BasePage } from './base.page.js';
-
-export class LoginPage extends BasePage {
-  constructor(page) {
-    super(page);
-    // Define locators
-    this.usernameInput = 'input[name="user-name"]';
-    this.passwordInput = 'input[name="password"]';
-    this.loginButton = 'input[type="submit"]';
-    this.errorMessage = 'h3[data-test="error"]';
-  }
-
-  async login(username, password) {
-    await this.fill(this.usernameInput, username);
-    await this.fill(this.passwordInput, password);
-    await this.click(this.loginButton);
-  }
-
-  async getErrorMessage() {
-    return await this.getText(this.errorMessage);
-  }
-}
-```
-
 ---
 
-### Example: `pages/products.page.js`
+### Example: `pages/checkoutpage.js`
 
 ```js
-import { BasePage } from './base.page.js';
+import { BasePage } from "../pages/base.page.js";
+import { expect } from "@playwright/test";
 
-export class ProductsPage extends BasePage {
+class CheckoutPage extends BasePage {
   constructor(page) {
     super(page);
-    this.addToCartButton = '#add-to-cart-sauce-labs-backpack';
-    this.cartIcon = '.shopping_cart_link';
-    this.productTitle = '.inventory_item_name';
+    this.checkoutButton = page.getByRole('button', { name: 'Checkout' });
+    this.firstNameInput = page.getByPlaceholder('First Name');
+    this.lastNameInput = page.getByPlaceholder('Last Name');
+    this.postalCodeInput = page.getByPlaceholder('Zip/Postal Code');
+    this.continueButton = page.getByRole('button', { name: 'Continue' });
+    this.finishButton = page.getByRole('button', { name: 'Finish' });
+    this.inventoryItem = page.locator('//div[@class="inventory_item_name"]');
+    this.orderconfirmation = page.locator('.complete-header');
   }
 
-  async addProductToCart() {
-    await this.click(this.addToCartButton);
+  async proceedToCheckout() {
+    await this.click(this.checkoutButton);
   }
 
-  async openCart() {
-    await this.click(this.cartIcon);
+  async fillCheckoutInformation(firstName, lastName, postalCode) {
+    await this.fill(this.firstNameInput, firstName);
+    await this.fill(this.lastNameInput, lastName);
+    await this.fill(this.postalCodeInput, postalCode);
+    await this.click(this.continueButton);
+  }
+  async finishCheckout() {
+    await this.click(this.finishButton);
   }
 
-  async getProductName() {
-    return await this.getText(this.productTitle);
+  async verifyCheckoutOverview(product) {
+    const productName = await this.inventoryItem.innerText();
+    expect(productName).toBe(product);
+  }
+
+  async verifyCheckoutComplete(orderConfirmationMessage) {
+    const confirmationMessage = await this.orderconfirmation.innerText();
+    expect(confirmationMessage).toBe(orderConfirmationMessage);
+    await this.page.screenshot({ path: 'reports/checkout-complete.png' });
   }
 }
+export default CheckoutPage;
 ```
 
 ---

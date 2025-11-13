@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import LoginPage from '../../pages/login.page';
+import { LoginPage } from '../../pages/login.page';
 import sharedData from '../../fixtures/test-data.json';
 
 test.describe('SauceDemo - Login flows', () => {
