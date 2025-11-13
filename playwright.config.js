@@ -129,6 +129,16 @@ const config = {
         screenshot: 'only-on-failure',
       },
     },
+
+    // -------------------------------------------------------
+    // API Testing Project
+    {
+      name: 'API-Tests',
+      testMatch: ['tests/API_Testing/**/*.spec.js'],   // only API tests
+      use: {
+        headless: true,
+      },
+    },
   ],
   reporter: [
     ['html'],
