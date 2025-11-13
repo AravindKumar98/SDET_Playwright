@@ -117,7 +117,7 @@ function getTestCaseDetails(filePath, testCaseIds) {
 
 // Example usage:
 const filePath = "./SauceLabs_TestCases.xlsx";
-const testCaseIds = ["TC303"];
+const testCaseIds = ["TC101", "TC102", "TC103", "TC104", "TC105"];
 
 const allDetails = getTestCaseDetails(filePath, testCaseIds);
 console.log(JSON.stringify(allDetails, null, 4));
