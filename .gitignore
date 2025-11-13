@@ -15,4 +15,6 @@ reports/
 test-results/
 allure-report/
 allure-results/
+playwright-report/
+test-results/
 

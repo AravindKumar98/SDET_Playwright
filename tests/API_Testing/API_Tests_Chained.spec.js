@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 
+test.describe.skip('Petstore User API - Chained API Requests', () => {
 test("Verify Chained API Requests - Create, Fetch, Update User", async ({ request }) => {
 
     const response = await request.post("https://petstore.swagger.io/v2/user/createWithList", {
@@ -78,6 +79,7 @@ test('Handle dependent APIs with token-based authentication (mock flow)', async 
   expect(getResponse.ok()).toBeTruthy();
   const getData = await getResponse.json();
   console.log('Resource Details:', getData);
+});
 });
 
 

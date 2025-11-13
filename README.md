@@ -151,23 +151,4 @@ Playwright MCP enables dynamic, data-driven test generation and execution using 
 - **TestCaseDetails/**: Stores the generated JSON files for use in automated tests.   
 
 
-# PlaywrightMCP_Instructions
-
-This folder contains documentation and instructions for using the Playwright-based Model Context Protocol (MCP) automation framework.
-
-## Contents
-- **apiTest.instructions.md**: Guidelines for API automation and integration with Playwright.
-- **webTest.instructions.md**: Steps and best practices for web UI automation using Playwright and the Page Object Model (POM).
-- **pom_structure_instructions.md**: Details on structuring and maintaining POM classes for scalable test automation.
-- **playwright_mcp_instructins.md**: General instructions for running, configuring, and extending the Playwright MCP framework, including dual workflow and JSON-driven test generation.
-
-## Usage
-- Refer to these markdown files for step-by-step instructions, code examples, and best practices.
-- Use as a reference when adding new tests, integrating APIs, or updating the POM structure.
-
-## Contribution
-- Update or add new instruction files as the framework evolves.
-- Keep documentation in sync with codebase changes for easier onboarding and maintenance.
-
----
 

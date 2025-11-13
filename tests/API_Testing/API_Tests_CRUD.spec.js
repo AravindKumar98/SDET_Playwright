@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test'
 test.describe.serial('Petstore User API - ordered CRUD tests', () => {
     let username = 'Test_user1';
 
-    test.only('POST | Verify POST Request - create user', async ({ request }) => {
+    test('POST | Verify POST Request - create user', async ({ request }) => {
         const response = await request.post('https://petstore.swagger.io/v2/user/createWithList', {
             data: [
                 {
