@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import LoginPage from '../../pages/login.page';
-import CartPage from '../../pages/cart.page';
+import { LoginPage } from '../../pages/login.page';
+import { CartPage } from '../../pages/cart.page';
 import sharedData from '../../fixtures/test-data.json';
 
 test('Search for the product and add to the cart', async ( {page} ) => {

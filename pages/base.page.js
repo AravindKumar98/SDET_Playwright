@@ -8,11 +8,21 @@ export class BasePage {
   }
 
   async click(element) {
-    await this.page.click(element);
+    // element can be a locator or selector string
+    if (typeof element === 'string') {
+      await this.page.click(element);
+    } else {
+      await element.click();
+    }
   }
 
   async fill(element, value) {
-    await this.page.fill(element, value);
+    // element can be a locator or selector string
+    if (typeof element === 'string') {
+      await this.page.fill(element, value);
+    } else {
+      await element.fill(value);
+    }
   }
 
   async getText(element) {

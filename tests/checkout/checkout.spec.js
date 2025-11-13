@@ -1,5 +1,5 @@
 import { test } from "playwright/test";
-import LoginPage from "../../pages/login.page";
+import { LoginPage } from "../../pages/login.page";
 import { CartPage } from "../../pages/cart.page.js";
 import { CheckoutPage } from "../../pages/checkout.page";
 import sharedData from "../../fixtures/test-data.json";

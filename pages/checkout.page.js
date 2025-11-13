@@ -1,18 +1,18 @@
-import { BasePage } from './base.page.js';
-import { expect } from 'playwright/test';
+import { expect } from '@playwright/test';
+import { BasePage } from "./base.page.js";
 
 export class CheckoutPage extends BasePage {
   constructor(page) {
     super(page);
-    this.checkoutButton = 'button:has-text("Checkout")';
-    this.firstNameInput = 'input[placeholder="First Name"]';
-    this.lastNameInput = 'input[placeholder="Last Name"]';
-    this.postalCodeInput = 'input[placeholder="Zip/Postal Code"]';
-    this.continueButton = 'input[type="submit"], button:has-text("Continue")';
-    this.finishButton = 'button:has-text("Finish")';
-    this.cancelButton = 'button:has-text("Cancel")';
-    this.inventoryItem = '.inventory_item_name';
-    this.orderConfirmation = '.complete-header';
+    this.checkoutButton = page.getByRole('button', { name: 'Checkout' });
+    this.firstNameInput = page.getByPlaceholder('First Name');
+    this.lastNameInput = page.getByPlaceholder('Last Name');
+    this.postalCodeInput = page.getByPlaceholder('Zip/Postal Code');
+    this.continueButton = page.getByRole('button', { name: 'Continue' });
+    this.finishButton = page.getByRole('button', { name: 'Finish' });
+    this.cancelButton = page.getByRole('button', { name: 'Cancel' });
+    this.inventoryItem = page.locator('.inventory_item_name');
+    this.orderConfirmation = page.locator('.complete-header');
   }
 
   async proceedToCheckout() {
@@ -27,16 +27,17 @@ export class CheckoutPage extends BasePage {
   }
 
   async verifyCheckoutOverview(product) {
-    const productName = await this.getText(this.inventoryItem);
+    const productName = await this.inventoryItem.innerText();
     if (product) expect(productName).toBe(product);
   }
 
   async finishCheckout() {
-    await this.click(this.finishButton);
+    await this.finishButton.click();
   }
 
   async verifyCheckoutComplete(orderConfirmationMessage) {
-    const confirmationMessage = await this.getText(this.orderConfirmation);
+    const confirmationMessage = await this.orderConfirmation.innerText();
     if (orderConfirmationMessage) expect(confirmationMessage).toBe(orderConfirmationMessage);
+    await this.page.screenshot({ path: 'reports/checkout-complete.png' });
   }
 }

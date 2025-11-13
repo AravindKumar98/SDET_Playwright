@@ -1,10 +1,12 @@
+
 import { expect } from "@playwright/test";
 import testData from "../fixtures/test-data.json";
+import { BasePage } from "./base.page.js";
 
-export class LoginPage {
+class LoginPage extends BasePage {
 
   constructor(page) {
-    this.page = page;
+    super(page);
     this.usernameInput = page.locator('#user-name');
     this.passwordInput = page.locator('#password');
     this.loginButton = page.locator('#login-button');
@@ -12,19 +14,19 @@ export class LoginPage {
   }
 
   async nagivateToSauceDemoSite() {
-    await this.page.goto(testData.baseURL);
+    await this.navigateTo(testData.baseURL);
   }
 
   async login(username, password) {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
+    await this.fill(this.usernameInput, username);
+    await this.fill(this.passwordInput, password);
+    await this.click(this.loginButton);
   }
 
   // Clear username and password inputs
   async clearCredentials() {
-    await this.usernameInput.fill('');
-    await this.passwordInput.fill('');
+    await this.fill(this.usernameInput, '');
+    await this.fill(this.passwordInput, '');
   }
 
   // Return login error text if present
@@ -84,4 +86,5 @@ export class LoginPage {
   }
 }
 
+export { LoginPage };
 
