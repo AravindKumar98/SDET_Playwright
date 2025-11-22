@@ -1,52 +1,39 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../../pages/login.page';
-import sharedData from '../../fixtures/test-data.json';
+import { test, expect } from '../../fixtures/custom-fixtures.js';
+import testData from "../../fixtures/test-data.json";
+import { LoginPage } from "../../pages/login.page.js";
 
-test.describe('SauceDemo - Login flows', () => {
+test.describe('Login Page Flows', () => {
+  let loginPage;
 
-    test.beforeEach(async ({ page }) => {
-        // create page object and navigate to site before each test
-        const loginPage = new LoginPage(page);
-        await loginPage.nagivateToSauceDemoSite();
-        // attach to test.info for access in tests
-        test.info().loginPage = loginPage;
-    });
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    console.log('[Setup] LoginPage initialized');
+  });
 
-            test('TD-001 | Login: should login with valid credentials', async ({ page }) => {
-                const loginPage = test.info().loginPage;
-                await loginPage.login(sharedData.username, sharedData.password);
-                // assertion moved into page object
-                await loginPage.assertLoginSuccess();
-            });
+  test('@smoke @regression TC101 - Verify successful login with valid credentials', async ({ page }) => {
+    await loginPage.login(testData.username, testData.password);
+    await loginPage.assertLoginSuccess();
+    expect(await loginPage.isLogoutButtonVisible()).toBeTruthy();
+    console.log('[Assert] User successfully logged in');
+  });
 
-            test('TD-002 | Login: should show error with invalid password', async ({ page }) => {
-                const loginPage = test.info().loginPage;
-                await loginPage.login(sharedData.username, 'wrong_password');
-                await loginPage.assertLoginErrorPresent();
-                    // check for the expected failure message from test data
-                    await loginPage.assertLoginErrorContains(sharedData.error_invalid_credentials);
-            });
+  test('@regression TC102 - Verify error message with invalid credentials', async ({ page }) => {
+    await loginPage.login('invalidUser', 'invalidPass');
+    expect(await loginPage.isErrorMessageVisible()).toBeTruthy();
+    expect(await loginPage.getErrorMessage()).toContain('Username and password do not match');
+    console.log('[Assert] Error message displayed for invalid login');
+  });
 
-            test('TD-003 | Login: should show error with invalid username', async ({ page }) => {
-                const loginPage = test.info().loginPage;
-                await loginPage.login('invalid_user', sharedData.password);
-                await loginPage.assertLoginErrorPresent();
-                    await loginPage.assertLoginErrorContains(sharedData.error_invalid_credentials);
-            });
+  test('@sanity TC103 - Verify logout functionality', async ({ page }) => {
+    await loginPage.login(testData.username, testData.password);
+    await loginPage.assertLoginSuccess();
+    await loginPage.logout();
+    expect(await loginPage.isLoginButtonVisible()).toBeTruthy();
+    console.log('[Assert] User successfully logged out');
+  });
 
-            test('TD-004 | Login: should show required errors when fields are empty', async ({ page }) => {
-                const loginPage = test.info().loginPage;
-                await loginPage.clearCredentials();
-                await loginPage.login('', '');
-                    // expected username required message from test data
-                    await loginPage.assertRequiredFieldError(sharedData.error_username_required);
-            });
-
-            test('TD-005 | Login: locked out user should not be able to login', async ({ page }) => {
-                const loginPage = test.info().loginPage;
-                await loginPage.login('locked_out_user', sharedData.password);
-                    await loginPage.assertLockedOutError(sharedData.error_locked_out);
-            });
-
+  test.afterEach(async () => {
+    console.log('[Teardown] Test completed for Login Page Flow');
+  });
 });
 

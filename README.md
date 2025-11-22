@@ -1,7 +1,8 @@
 
+
 # SDET_Playwright
 
-End-to-end testing framework for web applications using Playwright, now with Playwright MCP (Model Context Protocol) integration for dynamic, JSON-driven test generation and execution.
+<p align="center"><b>Enterprise-grade, scalable end-to-end automation framework for web and API testing, built on <a href="https://playwright.dev/">Playwright</a> and enhanced with <a href="https://github.com/AravindKumar98/SDET_Playwright/tree/Playwright_MCP/PlaywrightMCP_Instructions">MCP (Model Context Protocol)</a> for dynamic, JSON-driven test generation, self-healing execution, and robust reporting. Designed for reliability, maintainability, and scalability.</b></p>
 
 ## Project Structure
 - `tests/` — Feature-based folders (e.g., `auth/`, `cart/`, `checkout/`, `product/`) with `.spec.js` test files
@@ -105,10 +106,10 @@ End-to-end testing framework for web applications using Playwright, now with Pla
 
    - **MCP** enables dual workflow:
      - :computer: **Workflow A:** Real-time browser execution & validation
-     - :page_facing_up: **Workflow B:** Auto-generates Playwright test code (POM-based)
+     - :page_facing_up: **Workflow B:** Auto-generates Playwright test code (POM-based, with strict grouping, hooks, tags, comments, and log messages)
    - **Test cases** defined in [`TestCaseDetails/test_cases_details.json`](./GetTestCase_Automation/TestCaseDetails/test_cases_details.json)
    - **Instructions** in [`PlaywrightMCP_Instructions/playwright_mcp_instructins.md`](./PlaywrightMCP_Instructions/playwright_mcp_instructins.md)
-   - **POM standards** in [`pom_structure_instructions.md`](./PlaywrightMCP_Instructions/pom_structure_instructions.md)
+   - **POM & test script standards** in [`pom_structure_instructions.md`](./PlaywrightMCP_Instructions/pom_structure_instructions.md)
 
    ### How It Works
 
@@ -116,7 +117,8 @@ End-to-end testing framework for web applications using Playwright, now with Pla
    2. Run MCP (see instructions)
    3. MCP executes steps, validates, and generates code
    4. Test is saved in `tests/` and executed until pass
-   5. Results summarized in `reports/`
+   5. All generated scripts follow mandatory grouping, hooks, tags, comments, and log message standards
+   6. Results summarized in `reports/`
 
    ---
 
@@ -160,9 +162,19 @@ End-to-end testing framework for web applications using Playwright, now with Pla
    - **Specs:** Named by feature, grouped in `tests/`
    - **Reporting:** Allure & Playwright HTML for traceability
    - **CI:** Use environment variables for secrets (see `playwright.config.js`)
-  - **API Testing:** Place API-only specs in `tests/API_Testing/` and use the `API-Tests` project for separation.
-  - **Menu/Footer:** Use `menu.page.js` and `products.page.js` for navigation, logout, and footer assertions.
-  - **Extensibility:** Add new page objects and test flows as needed; reserved folders for future growth.
+   - **API Testing:** Place API-only specs in `tests/API_Testing/` and use the `API-Tests` project for separation.
+   - **Menu/Footer:** Use `menu.page.js` and `products.page.js` for navigation, logout, and footer assertions.
+   - **Extensibility:** Add new page objects and test flows as needed; reserved folders for future growth.
+
+   ### 🚦 Mandatory Test Script Standards (MCP-Generated)
+   - All MCP-generated test scripts **must**:
+     - Use `test.describe` to group related test cases by flow or feature
+     - Use Playwright hooks (`beforeEach`, `afterEach`, etc.) for setup/teardown
+     - Annotate each test with the appropriate tag(s): `@smoke`, `@regression`, `@sanity`
+     - Add clear comment statements before each logical block (setup, action, assertion, teardown)
+     - Insert `console.log` messages at key steps for traceability
+     - Ensure all code is clean, DRY, and maintainable
+   - See [`PlaywrightMCP_Instructions/playwright_mcp_instructins.md`](./PlaywrightMCP_Instructions/playwright_mcp_instructins.md) and [`pom_structure_instructions.md`](./PlaywrightMCP_Instructions/pom_structure_instructions.md) for full standards.
 
    ---
 
@@ -203,5 +215,5 @@ End-to-end testing framework for web applications using Playwright, now with Pla
   ---
 
   <p align="center" style="color: #888; font-size: 0.95em;">
-    <b>For questions, contributions, or support, please contact me.</b>
+    <b>For questions, contributions, or support, please contact.</b>
   </p>

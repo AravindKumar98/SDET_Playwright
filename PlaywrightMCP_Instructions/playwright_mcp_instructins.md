@@ -94,15 +94,22 @@ For each test case:
 4. Validate the **ExpectedResult** at the end.
 5. If validation fails → refine selectors or actions and re-run.
 
+
 ### Step 3: Generate Playwright Test File
 
 Before generating Playwright test scripts, refer to the `pom_structure_instructions.md`
-and strictly follow Page Object Model (POM) principles.
+and strictly follow Page Object Model (POM) principles **AND** the following code standards:
 
-❗ Mandatory POM Rule:
-All selectors, locators, and UI interactions must come from Page Object classes.
-The test file must NOT contain direct calls to page.locator() or any inline selector.
-Only call methods and getters from Page Objects.
+❗ Mandatory POM & Test Structure Rules:
+- All selectors, locators, and UI interactions must come from Page Object classes.
+- The test file must NOT contain direct calls to page.locator() or any inline selector.
+- Only call methods and getters from Page Objects.
+- All generated test scripts **must** use `test.describe` to group related test cases by flow or feature.
+- Use Playwright hooks (`beforeEach`, `afterEach`, etc.) for setup and teardown logic.
+- Each test case **must** be annotated with the appropriate tag(s): `@smoke`, `@regression`, `@sanity` (as relevant).
+- Add clear comment statements before each logical block (setup, action, assertion, teardown).
+- Insert `console.log` messages at key steps (setup, action, assertion, teardown) for traceability.
+- Ensure all generated code is clean, DRY, and maintainable.
 
 POM Auto-Creation:
 - If a Page Object or locator already exists → reuse it.
@@ -113,10 +120,10 @@ Once all steps execute successfully:
 
 • Generate Playwright JavaScript test code using @playwright/test.
 • Save the test in the tests/ folder using a predefined file name based on flow:
-    - Cart related → tests/cart-page.spec.js
-    - Checkout related → tests/checkout.spec.js
-    - Login related → tests/login.spec.js
-    - Other flows → tests/<flow-name>.spec.js
+  - Cart related → tests/cart-page.spec.js
+  - Checkout related → tests/checkout.spec.js
+  - Login related → tests/login.spec.js
+  - Other flows → tests/<flow-name>.spec.js
 • Do not generate long or random filenames.
 • Append new tests into the appropriate existing spec file.
 • Create the spec file if it doesn’t exist.
@@ -131,14 +138,26 @@ Login with valid credentials → tests/login.spec.js
 Example generated file:
 
 ```js
-import { test, expect } from "@playwright/test";
-import testData from "../fixtures/test-data.json";
+import { test, expect } from '../../fixtures/custom-fixtures.js';
+import testData from "../../fixtures/test-data.json";
+import { LoginPage } from "../../pages/login.page.js";
 
-test('TD-001 | Login: should login with valid credentials', async ({ page }) => {
-    const loginPage = test.info().loginPage;
-    await loginPage.login(sharedData.username, sharedData.password);
-    // assertion moved into page object
+// [Code Refactoring] Login Page Flows
+
+test.describe('Login Page Flows', () => {
+  let loginPage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    console.log('[Setup] LoginPage initialized');
+  });
+
+  test('@smoke @regression TC101 - Verify successful login with valid credentials', async ({ page }) => {
+    await loginPage.login(testData.username, testData.password);
     await loginPage.assertLoginSuccess();
+    expect(await loginPage.isLogoutButtonVisible()).toBeTruthy();
+    console.log('[Assert] User successfully logged in');
+  });
 });
 ```
 
@@ -153,7 +172,7 @@ npx playwright test tests/
 * Or run specific ones:
 
 ```bash
-npx playwright test tests/login-with-valid-credentials.spec.js
+npx playwright test tests/login.spec.js
 ```
 
 ### Step 5: Iterate Until Pass
