@@ -197,89 +197,11 @@ End-to-end testing framework for web applications using Playwright, now with Pla
    ---
 
    <p align="center">
-     <b>Made with ❤️ by Aravind Kumar | Inspired by top product engineering teams</b>
+     <b>Made with ❤️ by Aravind Kumar</b>
    </p>
 
   ---
 
   <p align="center" style="color: #888; font-size: 0.95em;">
-    <b>For questions, contributions, or support, please contact the maintainer or open an issue.</b>
+    <b>For questions, contributions, or support, please contact me.</b>
   </p>
-- `playwright.config.js` — central Playwright configuration (projects, reporters, traces, BrowserStack sections)
-- `package.json` — scripts and dependencies
-
-   ## Quick start
-   1. Install dependencies
-
-   ```powershell
-   npm ci
-   npm install
-   npm i -D allure-playwright
-   ```
-
-   2. Run the entire test suite
-
-   ```powershell
-   npx playwright test
-   ```
-
-   3. Run a single spec (example)
-
-   ```powershell
-   npx playwright test tests/auth/login.spec.js
-   ```
-
-   4. Run an API-only test file
-
-   ```powershell
-   npx playwright test tests/API_Testing/API_Tests_Chained.spec.js
-   ```
-
-   5. Run a single test by title (useful for TD IDs in titles)
-
-   ```powershell
-   npx playwright test -g "TD-001 | Login: should login with valid credentials"
-   ```
-
-   6. View Playwright HTML report (after a run)
-
-   ```powershell
-   npx playwright show-report
-   ```
-
-   7. Generate & serve Allure report (requires Allure CLI)
-
-   ```powershell
-   npx allure-playwright generate
-   npx allure serve allure-results
-   ```
-
-   ## Notes about API test services used in examples
-   - `reqres.in` is a mock API used for login and user creation. Note that POST-created resources may not persist (GET may return 404 for the returned id). Tests that depend on persistence will gracefully accept 200 or 404 and proceed to the next step (see `dependentApi.spec.js`).
-   - `jsonplaceholder.typicode.com` is used for mock create/read workflows in examples. While it returns a created id, it does not always persist resources across requests.
-
-   ## Conventions & patterns
-   - Page objects live in `pages/` and encapsulate locators, actions, and assertions. Prefer calling assertion helpers from tests (keeps tests concise).
-   - Test data lives in `fixtures/test-data.json`. This file now contains expected error messages used by tests (e.g., `error_invalid_credentials`).
-   - Use `test.describe.serial(...)` when you need tests to run in a strict order and share state (resource id, token).
-
-   ## Troubleshooting & tips
-   - If `npx playwright test` reports "No tests found", ensure test files are inside `tests/` and named `*.spec.js`.
-   - Avoid leaving `test.only` in tests — it will run only that test and skip others.
-   - Use `page.evaluate()` to set localStorage or cookies in the current page; use `page.addInitScript()` before `page.goto()` when you need the value during initial page load.
-   - For API tests, be aware of mock service behavior (non-persistence). Add tolerant assertions when interacting with such services.
-
-   ## CI / BrowserStack hints
-   - BrowserStack integration is available in `playwright.config.js` (projects named like `browserstack-chromium`). Provide credentials via environment variables in CI or locally:
-
-   ```powershell
-   $env:BROWSERSTACK_USERNAME='your_user'
-   $env:BROWSERSTACK_ACCESS_KEY='your_key'
-   ```
-
-## Main Utility
-- **getTestCaseDetails.js**: Reads test cases from an Excel file (e.g., `SauceLabs_TestCases.xlsx`) and outputs structured JSON to `TestCaseDetails/test_cases_details.json`.
-- **TestCaseDetails/**: Stores the generated JSON files for use in automated tests.   
-
-
-
