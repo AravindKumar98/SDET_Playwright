@@ -30,6 +30,13 @@ export class BasePage {
   }
 
   async isVisible(element) {
-    return await this.page.isVisible(element);
+    // Accepts either a selector string or a locator object
+    if (typeof element === 'string') {
+      return await this.page.isVisible(element);
+    } else if (typeof element === 'object' && typeof element.isVisible === 'function') {
+      return await element.isVisible();
+    } else {
+      throw new Error('Invalid argument passed to isVisible: must be a selector string or locator object');
+    }
   }
 }

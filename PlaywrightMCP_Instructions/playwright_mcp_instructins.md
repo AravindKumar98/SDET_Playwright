@@ -96,26 +96,36 @@ For each test case:
 
 ### Step 3: Generate Playwright Test File
 
-Before generating Playwright test scripts, **refer to the `pom_structure_instructions.md` file** adhere to POM design for reusability and maintainability.
+Before generating Playwright test scripts, refer to the `pom_structure_instructions.md`
+and strictly follow Page Object Model (POM) principles.
 
-While generating:
-1. **Use existing page classes** under the `/pages` directory for locators and actions.
-2. **If a page class or locator doesn’t exist**, MCP should automatically create or update it as per POM standards.
-3. **Do not hardcode locators** directly inside the test scripts.
-4. **Import page classes** into your Playwright tests to perform actions.
-5. **All page classes** must extend the `BasePage` for shared functionality (navigation, click, fill, visibility, etc.).
+❗ Mandatory POM Rule:
+All selectors, locators, and UI interactions must come from Page Object classes.
+The test file must NOT contain direct calls to page.locator() or any inline selector.
+Only call methods and getters from Page Objects.
 
----
+POM Auto-Creation:
+- If a Page Object or locator already exists → reuse it.
+- If a locator or method does not exist → create/update the Page Object automatically.
+- Then use it inside the test.
 
-* Once all steps execute successfully:
+Once all steps execute successfully:
 
-  * Generate Playwright JavaScript test code using `@playwright/test`.
-  * Save it in the `tests/` folder as `<sanitized-title>.spec.js`.
+• Generate Playwright JavaScript test code using @playwright/test.
+• Save the test in the tests/ folder using a predefined file name based on flow:
+    - Cart related → tests/cart-page.spec.js
+    - Checkout related → tests/checkout.spec.js
+    - Login related → tests/login.spec.js
+    - Other flows → tests/<flow-name>.spec.js
+• Do not generate long or random filenames.
+• Append new tests into the appropriate existing spec file.
+• Create the spec file if it doesn’t exist.
+
 
 Example filename:
 
 ```
-Login with valid credentials → tests/login-with-valid-credentials.spec.js
+Login with valid credentials → tests/login.spec.js
 ```
 
 Example generated file:
@@ -124,12 +134,11 @@ Example generated file:
 import { test, expect } from "@playwright/test";
 import testData from "../fixtures/test-data.json";
 
-test("User should able to login to Sauce Labs site", async ({ page }) => {
-  await page.goto(testData.baseURL);
-  await page.fill('input[name="user-name"]', testData.username);
-  await page.fill('input[name="password"]', testData.password);
-  await page.click('input[type="submit"]');
-  await expect(page.locator('text=Swag Labs')).toBeVisible();
+test('TD-001 | Login: should login with valid credentials', async ({ page }) => {
+    const loginPage = test.info().loginPage;
+    await loginPage.login(sharedData.username, sharedData.password);
+    // assertion moved into page object
+    await loginPage.assertLoginSuccess();
 });
 ```
 
