@@ -132,40 +132,44 @@ export default CheckoutPage;
 
 ## 🧠 3. Using Page Classes in Test Logic
 
-### Example: `tests/login-with-valid-credentials.spec.js`
+### Example: `tests/checkout.spec.js`
 
 ```js
-import { test } from "playwright/test";
-import { LoginPage } from "../../pages/login.page";
-import { CartPage } from "../../pages/cart.page.js";
-import { CheckoutPage } from "../../pages/checkout.page";
-import sharedData from "../../fixtures/test-data.json";
+import { test, expect } from '../../fixtures/custom-fixtures.js';
+import testData from '../../fixtures/test-data.json';
+import { LoginPage } from '../../pages/login.page.js';
+import { CartPage } from '../../pages/cart.page.js';
+import { CheckoutPage } from '../../pages/checkout.page.js';
 
-test.describe('TC301- Verify the checkout of the product', () => {
-    test('Complete the checout process', async ({ page }) => {
-        const login = new LoginPage(page);
-        await login.navigateToSauceDemoSite();
-        await login.login(sharedData.username, sharedData.password);
-        await login.verifyLoginSuccess();
-        const cart = new CartPage(page);
-        await cart.addProductToCart(sharedData.product);
-        await cart.verifyProductInCart(sharedData.product);
-        const checkoutPage = new CheckoutPage(page);
-        await checkoutPage.proceedToCheckout();
-        await checkoutPage.fillCheckoutInformation(sharedData.firstName, sharedData.lastName, sharedData.postalCode);
-        await checkoutPage.verifyCheckoutOverview(sharedData.product);
-        await checkoutPage.finishCheckout();
-        await checkoutPage.verifyCheckoutComplete(sharedData.orderConfirmationMessage);
+test.describe('Checkout Page Flows', () => {
+  let loginPage, cartPage, checkoutPage;
 
-    })
-})
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    cartPage = new CartPage(page);
+    checkoutPage = new CheckoutPage(page);
+    await loginPage.login(testData.username, testData.password);
+    await cartPage.addProductToCart(testData.product);
+    await cartPage.clickCheckoutButton();
+    console.log('[Setup] User logged in, product added, navigated to checkout');
+  });
+
+  test('@smoke @regression TC301 - Verify checkout information page', async ({ page }) => {
+    expect(await checkoutPage.isCheckoutInformationVisible()).toBeTruthy();
+    await checkoutPage.fillCheckoutInformation(testData.firstName, testData.lastName, testData.postalCode);
+    await checkoutPage.clickContinueButton();
+    expect(await checkoutPage.isCheckoutOverviewVisible()).toBeTruthy();
+    console.log('[Assert] Checkout information and overview page verified');
+  });
+});
 ```
 
 ---
 
-## 🧾 4. Guidelines for Test Generation via MCP
 
-When generating tests through Playwright MCP:
+## 🤖 4. Guidelines for Test Generation via MCP
+
+When generating tests through Playwright MCP, you **MUST** follow these standards:
 
 1. **Always reference this POM structure** for script creation.
 2. **Use existing page classes** to perform actions.
@@ -173,6 +177,13 @@ When generating tests through Playwright MCP:
 4. If a locator is missing, MCP should create or update the respective page class.
 5. **Export** all page classes and import them into test scripts.
 6. Store all generated page classes under the `/pages` directory.
+7. **MANDATORY:**
+  - All generated test scripts **must** use `test.describe` to group related test cases by flow or feature.
+  - Use Playwright hooks (`beforeEach`, `afterEach`, etc.) for setup and teardown logic.
+  - Each test case **must** be annotated with the appropriate tag(s): `@smoke`, `@regression`, `@sanity` (as relevant).
+  - Add clear comment statements before each logical block (setup, action, assertion, teardown).
+  - Insert `console.log` messages at key steps (setup, action, assertion, teardown) for traceability.
+  - Ensure all generated code is clean, DRY, and maintainable.
 
 ---
 
@@ -183,7 +194,7 @@ When generating tests through Playwright MCP:
 | 1    | Read `test_cases_details.json`            | Get structured test case data              |
 | 2    | Reference `pom_structure_instructions.md` | Follow POM standards while generating code |
 | 3    | Create or update relevant page class      | Add locators and actions                   |
-| 4    | Generate `tests/<test-title>.spec.js`     | Use imported page classes                  |
+| 4    | Generate `tests/<User_flow>.spec.js`     | Use imported page classes                  |
 | 5    | Execute and iterate until pass            | Maintain POM integrity                     |
 
 ---
