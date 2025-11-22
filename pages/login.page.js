@@ -3,15 +3,19 @@ import { expect } from "@playwright/test";
 import testData from "../fixtures/test-data.json";
 import { BasePage } from "./base.page.js";
 
-class LoginPage extends BasePage {
 
+class LoginPage extends BasePage {
   constructor(page) {
     super(page);
+    // Locators
+    this.page = page;
     this.usernameInput = page.locator('#user-name');
     this.passwordInput = page.locator('#password');
     this.loginButton = page.locator('#login-button');
     this.inventoryList = page.locator('.inventory_list');
   }
+
+  // ACTION METHODS
 
   async nagivateToSauceDemoSite() {
     await this.navigateTo(testData.baseURL);
@@ -23,20 +27,53 @@ class LoginPage extends BasePage {
     await this.click(this.loginButton);
   }
 
-  // Clear username and password inputs
   async clearCredentials() {
     await this.fill(this.usernameInput, '');
     await this.fill(this.passwordInput, '');
   }
 
-  // Return login error text if present
+  async logout() {
+    const menuButton = this.page.locator('button[aria-label="Open Menu"], #react-burger-menu-btn, [data-test="react-burger-menu-btn"]');
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+    const logoutLink = this.page.locator('a#logout_sidebar_link, a:has-text("Logout")');
+    await logoutLink.click();
+    await this.page.waitForSelector('#login-button', { state: 'visible' });
+  }
+
+  // ASSERTION/VERIFICATION METHODS
+
+  async isLogoutButtonVisible() {
+    const menuButton = this.page.locator('button[aria-label="Open Menu"], #react-burger-menu-btn, [data-test="react-burger-menu-btn"]');
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+    const logoutLink = this.page.locator('a#logout_sidebar_link, a:has-text("Logout")');
+    return await logoutLink.isVisible();
+  }
+
+  async isErrorMessageVisible() {
+    const error = this.page.locator('[data-test="error"], h3:has-text("Epic sadface")');
+    return await error.isVisible();
+  }
+
+  async getErrorMessage() {
+    const error = this.page.locator('[data-test="error"], h3:has-text("Epic sadface")');
+    if (await error.count() === 0) return '';
+    return (await error.innerText()).trim();
+  }
+
+  async isLoginButtonVisible() {
+    return await this.loginButton.isVisible();
+  }
+
   async getLoginErrorText() {
     const error = this.page.locator('[data-test="error"]');
     if (await error.count() === 0) return '';
     return (await error.innerText()).trim();
   }
 
-  // Alias with correct spelling (keeps backward compatibility)
   async navigateToSauceDemoSite() {
     return this.nagivateToSauceDemoSite();
   }
@@ -48,9 +85,7 @@ class LoginPage extends BasePage {
     await this.page.screenshot({ path: 'reports/login-success.png' });
   }
 
-  // Assertion helpers moved into the page object so tests can call them
   async assertLoginSuccess() {
-    // Wait and assert inventory list is visible
     await expect(this.inventoryList).toBeVisible();
   }
 
@@ -70,7 +105,6 @@ class LoginPage extends BasePage {
     if (expectedMessage) {
       expect(err).toContain(expectedMessage);
     } else {
-      // ensure message mentions username or password
       expect(err.toLowerCase()).toMatch(/username|password/);
     }
   }
@@ -85,6 +119,7 @@ class LoginPage extends BasePage {
     }
   }
 }
+
 
 export { LoginPage };
 
